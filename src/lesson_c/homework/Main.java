@@ -1,5 +1,5 @@
 package lesson_c.homework;
-
+/*
 public class Main {
     private static class Stack {
         private int[] stack;
@@ -111,15 +111,15 @@ public class Main {
                 throw new RuntimeException("Queue is full!");
             if (tail == queue.length -1)
                 tail = -1;
-<<<<<<< HEAD
+//<<<<<<< HEAD
             queue[++tail] = i;
-=======
+//=======
 
 
             queue[++tail] = i;
 
 
->>>>>>> homework3
+//>>>>>>> homework3
             capacity++;
         }
 
@@ -217,4 +217,4 @@ public class Main {
 
 >>>>>>> homework3
     }
-}
+}*/
