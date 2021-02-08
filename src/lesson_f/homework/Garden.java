@@ -53,31 +53,38 @@ public class Garden {
 
         TreeNode root;
 
+        // 3. * Переписать метод добавления элемента в дерево с использованием компаратора (и рекурсивного подхода)
         public void insert(Cat c){
             TreeNode node = new TreeNode(c);
             if(root == null){
                 root = node;
             }else {
                 TreeNode current = root;
-                TreeNode parent;
-                while (true){
-                    parent = current;
-                    if(c.age < current.c.age){
-                        current = current.left;
-                        if(current == null) {
-                            parent.right = node;
-                            return;
-                        }
-                    }else if(c.age > current.c.age){
-                        current = current.right;
-                        if(current == null) {
-                            parent.right = node;
-                            return;
-                        }
-                    }else {
-                        return;
-                    }
+                TreeNode parent = root;
+                while (current != null){
+                    current = (c.age < current.c.age) ? current.left : current.right;
                 }
+                parent.right = node;
+                return;
+
+//                while (true){
+//                    parent = current;
+//                    if(c.age < current.c.age){
+//                        current = current.left;
+//                        if(current == null) {
+//                            parent.right = node;
+//                            return;
+//                        }
+//                    }else if(c.age > current.c.age){
+//                        current = current.right;
+//                        if(current == null) {
+//                            parent.right = node;
+//                            return;
+//                        }
+//                    }else {
+//                        return;
+//                    }
+//                }
             }
         }
 
