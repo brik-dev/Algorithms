@@ -52,7 +52,7 @@ public class Garden {
         }
 
         TreeNode root;
-        
+
         public void insert(Cat c){
             TreeNode node = new TreeNode(c);
             if(root == null){
