@@ -28,7 +28,7 @@ public class Garden {
     }
 
     private static class Tree{
-        // никто не знает, что там снутри дерева, поэтому там приватная нода
+        // никто не знает, что там внутри дерева, поэтому там приватная нода
         private static class TreeNode implements Comparable{
             // и приватная нода будет хранить котика
             private Cat c;
@@ -145,6 +145,101 @@ public class Garden {
             preOrderTraverse(root);
         }
 
+        // Алгоритм удаления из дерева
+        public Cat delete(int age){
+            // наш понадобиться current Treenode текущий
+            TreeNode current = root; // выставим его на корень
+            TreeNode parent = root; // Для привязки
+            boolean isLeftChild = true;
+            while (current.c.age != age) { // вобежим по нашему дереву, пока кота в текущем узле не совпадет у кота возраст с переданным возрастом
+                // теперь бегаем
+                // нам нужно переключаться, поэтому
+                parent = current;
+                // и переключаться мы будет либо влево, либо вправо c использованием уже известного компоратора
+                 if (age < current.c.age){
+                     // если меньше то мы уходим влево
+                     // и здесь нам важна одна оговорка: нам бы переключать перента и нам бы как то учесть, в какую сторону мы ушли
+                     // если мы ушли в какой-то узел, то мы знаем что это за родитель. Но мы незнаем в случае удаления этого узла, родителю важно привязать левый узел или правый
+                     // поэтому мы придумаем какой-то boolean с названием isLeftChild - признак направления
+                     // и здесь, когда мы ушли влево, мы говорим isLeftChild true, в обратном случае false
+                     current = current.left;
+                     isLeftChild = true;
+
+                 }else {
+                     // в противном случае вдругую сторону
+                     current = current.right;
+                     isLeftChild = false;
+
+                 }
+                 // если мы ушли настолько, что карень ноль, то значит кот не найден
+                 if (current == null){
+                     return null;
+                 }
+            }
+
+            // когда мы нашли нужного кота по возрасту, нам нужно его удалить
+            // самы простой вариант - это удаление листа
+            // leaf - здаесь мы говорим, если у текущего лефт и райт равны нулю
+            if (current.left == null && current.right == null){
+                // тут мы находимся в узле и тут у нас есть 3 варианта развития событий
+                // 1. мы как узел можем быть рутом, тогда мы зануляем рут
+                if (current == root){
+                    root = null;
+                }else if (isLeftChild){ // 2. мы можем быть left child, тогда у перента нужно занулить левую ссылку
+                    current.left = null;
+                }else { // 3. мы можем быть не левым child - тогда зануляем у паранта правую ссылку
+                    current.right = null;
+                }
+            }
+            // one ancestor
+            else if (current.right == null) {
+                if (isLeftChild)
+                    parent.left = current.left;
+                else
+                    parent.right = current.left;
+            }
+            else if (current.left == null) {
+                if (isLeftChild)
+                    parent.left = current.right;
+                else
+                    parent.right = current.right;
+            }
+            // two ancestors
+            else {
+                TreeNode successor = getSuccessor(current);
+                if (current == root) {
+                    root = successor;
+                } else if (isLeftChild) {
+                    parent.left = successor;
+                } else {
+                    parent.right = successor;
+                }
+                successor.left = current.left;
+            }
+
+            // то есть в конце мы возвращаем current кота
+            return current.c;
+        }
+
+        private TreeNode getSuccessor(TreeNode node) {
+            TreeNode current = node.right;
+            TreeNode parent = node;
+            TreeNode successor = node;
+            while (current != null) {
+                parent = successor;
+                successor = current;
+                current = current.left;
+            }
+
+            if (successor != node.right) {
+                parent.left = successor.right;
+                successor.right = node.right;
+            }
+            return successor;
+        }
     }
 
+    public static void main(String[] args) {
+
+    }
 }
