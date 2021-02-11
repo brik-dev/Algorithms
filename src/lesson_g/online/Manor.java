@@ -1,5 +1,9 @@
 package lesson_g.online;
 
+/**
+ * 1. Реализовать программу, в которой задается граф из 10 вершин. Задать ребра и найти кратчайший путь с помощью поиска в ширину.
+ */
+
 import lesson_c.lesson.Queue;
 import lesson_c.lesson.Stack;
 
@@ -42,10 +46,22 @@ public class Manor {
         public void displayVertex(int v) {
             System.out.print(vertexList[v] + " ");
         }
+        public void displayEdge(int start, int end){
+            System.out.println(adjacencyMatrix[start][end] + " " + adjacencyMatrix[end][start]);
+        }
         private int getUnvisitedVertex(int current) {
             for (int i = 0; i < currentSize; i++) {
                 if (adjacencyMatrix[current][i] == 1 &&
                         !vertexList[i].wasVisited) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        private int getVertexWithEdge(int current){
+            for (int i = 0; i < currentSize; i++) {
+                if (adjacencyMatrix[current][i] == 1) {
                     return i;
                 }
             }
@@ -88,6 +104,28 @@ public class Manor {
                 vertexList[i].wasVisited = false;
             }
         }
+
+        public void widthTraverse(int goTo) { // goTo = вершина, путь к которой мы ищем
+            Queue queue = new Queue(MAX_VERTICES);
+            vertexList[0].wasVisited = true;
+            queue.insert(0);
+            int distance = 0;
+            while (!queue.isEmpty()) {
+                int current = queue.remove();
+                displayVertex(current);
+                int next;
+                while ((next = getUnvisitedVertex(current)) != -1 && getVertexWithEdge(current) == 1) {
+                    vertexList[next].wasVisited = true;
+                    queue.insert(next);
+                    distance++;
+                    if (vertexList[next] == vertexList[goTo]){
+                        System.out.println(vertexList[next] + " - distance: " + distance);
+                    }
+                }
+            }
+            resetFlags();
+            System.out.println("Distance = " + distance);
+        }
     }
 
     public static void main(String[] args) {
@@ -104,5 +142,31 @@ public class Manor {
         g.depthTraverse();
         System.out.println();
         g.widthTraverse();
+        System.out.println();
+
+        Graph graph = new Graph();
+        graph.addVertex('a');
+        graph.addVertex('b');
+        graph.addVertex('c');
+        graph.addVertex('d');
+        graph.addVertex('e');
+        graph.addVertex('f');
+        graph.addVertex('g');
+        graph.addVertex('h');
+        graph.addVertex('i');
+        graph.addVertex('j');
+        graph.addEdge(1, 2);
+        graph.addEdge(2, 0);
+        graph.addEdge(3, 4);
+        graph.addEdge(0, 4);
+        graph.addEdge(3, 6);
+        graph.addEdge(6, 7);
+        graph.addEdge(4, 8);
+        graph.addEdge(8, 5);
+        graph.addEdge(4, 8);
+        graph.addEdge(5, 9);
+        graph.widthTraverse();
+        System.out.println();
+        graph.widthTraverse(5);
     }
 }
